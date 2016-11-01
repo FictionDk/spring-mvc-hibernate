@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context-4.3.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+	<context:annotation-config />
+	<context:component-scan base-package="cn.fictio.myweb">
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+
+    <!-- 数据库映射 -->
+    <!--  class="org.apache.tomcat.dbcp.dbcp.BasicDataSource" -->
+    <!--  class="org.springframework.jdbc.datasource.DriverManagerDataSource" -->
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/mydb?serverTimezone=UTC" />
+		<property name="username" value="root" />
+		<property name="password" value="828rsk" />
+	</bean>
+
+	<!-- 配置hibernate SessionFactory -->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="hibernateProperties">
+			<props>
+				<prop key="driverClass">org.gjt.mm.mysql.Driver</prop>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect </prop>
+				<prop key="hibernate.hbm2ddl.auto">create-drop</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hiberante.format_sql">true</prop>
+			</props>
+		</property>
+
+		<property name="packagesToScan">
+			<list>
+				<value>cn.fictio.myweb.pojo</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 配置Hibernate事务管理器 -->
+	<bean id="txManager"
+		class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<!-- 配置事务异常封装 
+	<bean id="persistenceExceptionTranslationPostProcessor"
+		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+	-->
+	
+	<!-- 配置事务通知--> 
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<!--  
+		<tx:attributes>
+			<tx:method name="add*" read-only="false" propagation="REQUIRED"/>
+			<tx:method name="save*" read-only="false" propagation="REQUIRED" />
+			<tx:method name="del*" read-only="false" propagation="REQUIRED"/>
+			<tx:method name="update*" read-only="false" propagation="REQUIRED"/>
+			<tx:method name="SignUp" read-only="false" propagation="REQUIRED"/>
+			<tx:method name="*" read-only="true" />
+		</tx:attributes>
+		-->
+	</tx:advice>
+	
+	<tx:annotation-driven transaction-manager="txManager" />
+	
+	<!-- service下所有类的所有方法都交给spring事务处理。 
+	<aop:config expose-proxy="true">
+		<aop:pointcut id="bussinessService" expression="execution(* service.*.*(..))" />
+		<aop:advisor pointcut-ref="bussinessService" advice-ref="txAdvice" />
+	</aop:config>
+	-->
+	
+	<!--  
+	<bean id="hibernateTemplate" 
+		class="org.springframework.orm.hibernate5.HibernateTemplate">
+		<property name="sessionFactory" ref="sessionFactory"/>
+		<property name="checkWriteOperations" value="false" />
+	</bean>
+	-->
+	
+	
+
+</beans>
