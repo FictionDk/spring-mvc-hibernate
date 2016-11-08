@@ -1,30 +1,10 @@
 package cn.fictio.myweb.pojo;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
-import org.hibernate.annotations.GenericGenerator;
-
-@Entity
-@Table(name="user")
 public class User {
-	
-	@Id
-	@GeneratedValue(generator= "paymentableGenerator") 
-	@GenericGenerator(name = "paymentableGenerator",strategy = "uuid")
-	@Column(name="id")
 	private String id;
-
-	@Column(name="userName")
 	private String userName;
-	
-	@Column(name="password")
 	private String password;
-	
-	
 	
 	public String getId() {
 		return id;

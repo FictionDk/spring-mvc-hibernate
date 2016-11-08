@@ -5,28 +5,22 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import cn.fictio.myweb.dao.UserDao;
+import cn.fictio.myweb.commUtils.CommUtils;
 import cn.fictio.myweb.pojo.User;
+import cn.fictio.myweb.pojo.mapper.UserMapper;
 
 @Component("userService")
 public class UserService {
 	
 	@Resource
-	private UserDao userDao;
+	private UserMapper userMapper;
 
-	public boolean Login(User u) {
-		User user = userDao.getUserByUserName(u);
-		System.out.println(user.toString());
-		if (user != null && user.getPassword().equals(u.getPassword())){
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-
+	@Transactional
 	public boolean SignUp(User u) {
-		userDao.save(u);
+		
+		u.setId(CommUtils.scopeRandom(6).toString());
+		System.out.println(u);
+		userMapper.insertUser(u);
 		return true;
 	}
 	

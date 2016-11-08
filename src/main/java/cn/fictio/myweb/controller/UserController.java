@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import cn.fictio.myweb.commUtils.CommUtils;
 import cn.fictio.myweb.pojo.User;
 import cn.fictio.myweb.service.UserService;
 
@@ -23,9 +24,10 @@ public class UserController {
 			@RequestParam("password")String password){
 		
 		User u = new User();
+		u.setId(CommUtils.scopeRandom(6).toString());
 		u.setUserName(userName);
 		u.setPassword(password);
-		boolean isSuccess = userService.Login(u);
+		boolean isSuccess = true;
 		if (isSuccess){
 			System.out.println("login sucess!");
 			return "loginSuceess";
@@ -40,17 +42,20 @@ public class UserController {
 			@RequestParam("password") String password){
 		
 		User u = new User();
-		//u.setId(CommUtils.scopeRandom(5));
+		String id = CommUtils.scopeRandom(6).toString();
+		System.out.println("id="+id);
+		
+		u.setId(id);
 		u.setPassword(password);
 		u.setUserName(userName);
-		System.out.println(u.toString());
+		System.out.println("你个傻逼!"+u.toString());
+		
 		boolean signSucess = userService.SignUp(u);
 		if (signSucess){
 			return "loginSuceess";
 		}else {
 			return "error";
 		}
-		
 	}
 	
 	@RequestMapping(value="/test",method=RequestMethod.GET)
