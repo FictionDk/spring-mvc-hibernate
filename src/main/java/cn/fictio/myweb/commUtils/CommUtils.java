@@ -26,13 +26,7 @@ public class CommUtils {
 		for (int i = 1; i < length; i++){
 			max = max*10;
 			min = min*10;
-			System.out.println("第"+i+"次::");
-			System.out.println("max="+max);
-			System.out.println("min="+min);
 		}
-		//System.out.println("max="+max);
-		//System.out.println("min="+min);
-		
 		//int max = 99999999;
 		//int min = 10000001;
 		int result = new Random().nextInt(max) % (max - min + 1) + min;

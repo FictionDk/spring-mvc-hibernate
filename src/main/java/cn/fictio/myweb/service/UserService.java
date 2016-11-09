@@ -1,27 +1,50 @@
 package cn.fictio.myweb.service;
 
-import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import cn.fictio.myweb.commUtils.CommUtils;
+import cn.fictio.myweb.dao.UserMapper;
 import cn.fictio.myweb.pojo.User;
-import cn.fictio.myweb.pojo.mapper.UserMapper;
 
 @Component("userService")
 public class UserService {
 	
-	@Resource
+	@Autowired
 	private UserMapper userMapper;
 
 	@Transactional
-	public boolean SignUp(User u) {
+	public boolean signUp(User u) {
+		User user = userMapper.getUserByName(u.getUserName());
+		if (user != null){
+			return false;
+		}
+		int i = userMapper.insert(u);
+		if( i != 1){
+			return false;
+		}
 		
-		u.setId(CommUtils.scopeRandom(6).toString());
-		System.out.println(u);
-		userMapper.insertUser(u);
 		return true;
+	}
+
+	public boolean login(User u) {
+		User user = userMapper.getUserByName(u.getUserName());
+		if(user != null && user.getPassword().equals(u.getPassword())){
+			return true;
+		}
+		return false;
+	}
+
+	@Transactional
+	public boolean deleteUser(User u) {
+		if(login(u)){
+			int i = userMapper.deleteUser(u.getUserName());
+			if(i == 1){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 }

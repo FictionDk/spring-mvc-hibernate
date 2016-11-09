@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.fictio.myweb.dao.UserMapper">
+
+	<resultMap id="BaseResultMap" type="cn.fictio.myweb.pojo.User">
+		<id column="ID" property="id" />
+		<result column="USERNAME" property="userName" />
+		<result column="PASSWORD" property="password" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		ID, USERNAME, PASSWORD
+	</sql>
+
+	<insert id="insert" parameterType="cn.fictio.myweb.pojo.User">
+		insert into USER (USERNAME,
+		PASSWORD)
+		values (#{userName}, #{password})
+	</insert>
+
+	<select id="getUserByName" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from USER where USERNAME = #{userName}
+	</select>
+
+	<delete id="deleteUser" parameterType="java.lang.String">
+		delete from USER
+		where USERNAME = #{userName}
+	</delete>
+
+	<select id="getAll" resultMap="BaseResultMap">
+		select * from user
+	</select>
+</mapper>

@@ -37,7 +37,7 @@
         class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
         <!-- 前缀prefix,后缀suffix 拼接 -->
-        <property name="prefix" value="/WEB-INF/jsps/" />
+        <property name="prefix" value="/WEB-INF/jsp/" />
         <property name="suffix" value=".jsp" />
         
         <!-- 其它配置方式  

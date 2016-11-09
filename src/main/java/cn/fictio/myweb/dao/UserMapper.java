@@ -2,8 +2,14 @@ package cn.fictio.myweb.dao;
 
 import cn.fictio.myweb.pojo.User;
 
-public interface UserDao {
+public interface UserMapper {
 	
-	public void addUser(User user);
+	public int insert(User user);
+	
+	public User getAll();
+
+	public User getUserByName(String userName);
+
+	public int deleteUser(String userName);
 
 }
